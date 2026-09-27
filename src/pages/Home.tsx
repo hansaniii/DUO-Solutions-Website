@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useRef } from 'react';
 
 const sectionVariants = {
   hidden: { opacity: 0 },
@@ -148,45 +149,58 @@ const FadingText = () => (
   </section>
 );
 
-const Showreel = () => (
-  <section className="px-6 md:px-12 pb-24 md:pb-32 bg-[#fcfcfc]">
-    <div className="w-full relative aspect-[3/4] md:aspect-video bg-black/5 overflow-hidden group cursor-pointer">
-      <div className="absolute top-6 left-6 z-10 text-[10px] font-bold uppercase tracking-widest text-white mix-blend-difference opacity-70">
-        00:02:30
-      </div>
-      <div className="absolute top-6 right-6 z-10 text-[10px] font-bold uppercase tracking-widest text-white mix-blend-difference opacity-70 text-right">
-        60fps<br/>Res: 1920x1080
-      </div>
-      
-      <motion.img 
-        animate={{ scale: [1, 1.05, 1] }} 
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        src="https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=1926&auto=format&fit=crop"
-        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
-        referrerPolicy="no-referrer"
-      />
-      
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-[80%] md:w-[60%] h-[30%] bg-white/10 backdrop-blur-sm border border-white/20 p-2 overflow-hidden flex items-center">
-           <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop" referrerPolicy="no-referrer" className="object-cover w-full h-full grayscale mix-blend-overlay opacity-50"/>
-           <div className="absolute inset-0 flex items-center justify-center text-white/50 font-serif italic text-3xl md:text-5xl tracking-tighter mix-blend-overlay">NOWHERE</div>
+const Showreel = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleMouseEnter = () => {
+    if (videoRef.current) {
+      videoRef.current.play();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
+  };
+
+  return (
+    <section className="px-6 md:px-12 pb-24 md:pb-32 bg-[#fcfcfc]">
+      <div
+        className="w-full relative aspect-[3/4] md:aspect-video bg-black/5 overflow-hidden group cursor-pointer"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div className="absolute top-6 left-6 z-10 text-[10px] font-bold uppercase tracking-widest text-white mix-blend-difference opacity-70">
+          00:02:30
+        </div>
+        <div className="absolute top-6 right-6 z-10 text-[10px] font-bold uppercase tracking-widest text-white mix-blend-difference opacity-70 text-right">
+          60fps<br/>Res: 1920x1080
+        </div>
+
+        <video
+          ref={videoRef}
+          src="/MainVideoWithAudio.mp4"
+          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
+          loop
+          muted
+        />
+
+        <div className="absolute bottom-6 left-6 flex-col md:flex-row flex md:items-center gap-4 md:gap-8 z-10 w-full pr-12">
+          <div className="text-[10px] font-bold uppercase tracking-widest text-white mix-blend-difference flex items-center gap-2 group-hover:opacity-50 transition-opacity">
+            Play Showreel <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+          </div>
+          <div className="hidden md:block absolute left-1/2 -translate-x-1/2 px-4 py-1 border border-white/30 backdrop-blur-sm text-[9px] font-bold uppercase tracking-widest text-white">
+            04. AI CONTENT CREATION
+          </div>
+          <div className="md:absolute right-12 text-[10px] font-bold uppercase tracking-widest text-white mix-blend-difference opacity-70">
+            DUO©2026_SHOWREEL.MP4
+          </div>
         </div>
       </div>
-      
-      <div className="absolute bottom-6 left-6 flex-col md:flex-row flex md:items-center gap-4 md:gap-8 z-10 w-full pr-12">
-        <div className="text-[10px] font-bold uppercase tracking-widest text-white mix-blend-difference flex items-center gap-2 group-hover:opacity-50 transition-opacity">
-          Play Showreel <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-        </div>
-        <div className="hidden md:block absolute left-1/2 -translate-x-1/2 px-4 py-1 border border-white/30 backdrop-blur-sm text-[9px] font-bold uppercase tracking-widest text-white">
-          04. AI CONTENT CREATION
-        </div>
-        <div className="md:absolute right-12 text-[10px] font-bold uppercase tracking-widest text-white mix-blend-difference opacity-70">
-          DUO©2026_SHOWREEL.MP4
-        </div>
-      </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export const Home = () => (
   <main className="bg-[#fcfcfc] text-[#111]">
